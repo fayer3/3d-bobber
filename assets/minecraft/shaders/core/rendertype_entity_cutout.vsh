@@ -33,12 +33,12 @@ out vec3 viewPos;
 out vec4 Pos1;
 out vec4 Pos2;
 
-float fog_distance(mat4 modelViewMat, vec3 pos, int shape) {
+float fog_distance(vec3 pos, int shape) {
     if (shape == 0) {
-        return length((modelViewMat * vec4(pos, 1.0)).xyz);
+        return length(pos);
     } else {
-        float distXZ = length((modelViewMat * vec4(pos.x, 0.0, pos.z, 1.0)).xyz);
-        float distY = length((modelViewMat * vec4(0.0, pos.y, 0.0, 1.0)).xyz);
+        float distXZ = length(pos.xz);
+        float distY = abs(pos.y);
         return max(distXZ, distY);
     }
 }
@@ -61,8 +61,9 @@ void main() {
       
       vec3 offset = vec3(corners[gl_VertexID % 4], 0);
       
-      if (Normal.y < 0.99) {
+      if ((mat3(ModelViewMat) * Normal).y < 0.99) {
         // vivecraft has a non vec3(0,1,0) Normal
+        // because vivecraft has camera roll, the offset doesn't work right, so remove it
         offset = vec3(0);
       }
       
@@ -74,7 +75,7 @@ void main() {
       vertexColor = minecraft_mix_light(Light0_Direction, Light1_Direction, Normal, Color);
     }
     
-    vertexDistance = fog_distance(ModelViewMat, IViewRotMat * Position, FogShape);
+    vertexDistance = fog_distance(IViewRotMat * Position, FogShape);
     lightMapColor = texelFetch(Sampler2, UV2 / 16, 0);
     overlayColor = texelFetch(Sampler1, UV1, 0);
     texCoord0 = UV0;

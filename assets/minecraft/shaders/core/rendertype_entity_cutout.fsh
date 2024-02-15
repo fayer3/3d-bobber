@@ -10,6 +10,7 @@ uniform float FogStart;
 uniform float FogEnd;
 uniform vec4 FogColor;
 
+uniform mat4 ModelViewMat;
 uniform mat3 IViewRotMat;
 uniform mat4 ProjMat;
 uniform vec3 Light0_Direction;
@@ -33,7 +34,7 @@ out vec4 fragColor;
 #define bobber3Dcomplex 1     // complex 3D voxel raytraced bobber/hook/string        513 box intersections
 #define bobber3Dflat 2        // complex flat 3D voxel raytraced bobber/hook/string    65 box intersections
 #define bobber3DcomplexFast 3 // basic box with flat 3D voxel raytraced hook/string    34 box intersections
-#define bobbermode bobber3Dflat
+#define bobbermode bobber3Dbasic
 
 //#define bobberString          // show black string
 
@@ -137,7 +138,15 @@ void main() {
       Pos.y += Yoffset;
       
       vec3 dir = normalize(-viewPos.xyz);
-      vec3 worldDir = IViewRotMat*dir;
+      
+      vec3 worldDir;
+      if (IViewRotMat[0].x > 0.999 && IViewRotMat[1].y > 0.999 && IViewRotMat[2].z > 0.999) {
+      // 1.20.5+ removes IViewRotMat
+        worldDir = dir * mat3(ModelViewMat);
+      } else {
+        worldDir = IViewRotMat*dir;
+      }
+
       #if bobbermode == bobber3Dbasic
         vec3 stringNormal = vec3(0.0);
         #ifdef bobberString
