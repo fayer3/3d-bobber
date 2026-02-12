@@ -2,9 +2,9 @@
     "pack": {
         "description": "3D fishing hook bobber for 1.18.1-1.20.5",
         "pack_format": 15,
-        "supported_formats": [15,75],
+        "supported_formats": [15,81],
         "min_format": 15,
-        "max_format": 75
+        "max_format": 81
     },
     "overlays": {
         "entries": [
@@ -21,10 +21,16 @@
                 "directory": "1.21.6-overlay"
             },
             {
-                "formats": [69, 999],
+                "formats": [69, 75],
                 "min_format": 69,
-                "max_format": 999,
+                "max_format": 75,
                 "directory": "1.21.9-overlay"
+            },
+            {
+                "formats": [76, 999],
+                "min_format": 76,
+                "max_format": 999,
+                "directory": "26.1-overlay"
             }
         ]
     }
