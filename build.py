@@ -92,7 +92,7 @@ def main():
         version_list.append(preset_id)
 
     # Write metadata.json
-    metadata_path = BASE_DIR.joinpath("build", version, "metadata.json")
+    metadata_path = BASE_DIR.joinpath("build", "metadata.json")
     metadata_path.parent.mkdir(exist_ok=True, parents=True)
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=4)
