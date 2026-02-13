@@ -8,6 +8,8 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v6
 
