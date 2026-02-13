@@ -68,8 +68,10 @@ def main():
     metadata = {}
     metadata["mc_versions"] = build_data["mc_versions"]
     metadata["changelog"] = build_data["changelog"]
-    metadata_entries = []
+    metadata_entries = {}
     metadata["versions"] = metadata_entries
+    version_list = []
+    metadata["version_list"] = version_list
 
     for entry in build_data["presets"]:
         preset_id = entry["id"]
@@ -82,11 +84,12 @@ def main():
 
         zip_path = create_pack(version, image, suffix, mode, enable_string)
 
-        metadata_entries.append({
+        metadata_entries.update({preset_id: {
             "version-id": f"{version}-{preset_id}",
             "name": f"3D Bobber {version} {suffix.replace('-', '')}",
             "path": str(zip_path.relative_to(BASE_DIR))
-        })
+        }})
+        version_list.append(preset_id)
 
     # Write metadata.json
     metadata_path = BASE_DIR / "build" / version / "metadata.json"

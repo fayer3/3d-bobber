@@ -23,15 +23,15 @@ jobs:
         id: set-matrix
         run: |
           VERSION=$(jq -r '.version' build-data.json)
-          MATRIX=$(jq -c '.' build/$VERSION/metadata.json)
+          MATRIX=$(jq -c '.version_list' build/$VERSION/metadata.json)
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
-          echo "$MATRIX"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
         with:
           name: built-assets
-          path: build/
+          path: build/${{ steps.set-matrix.outputs.version}}
 
   process-assets:
     needs: generate-matrix
@@ -39,7 +39,7 @@ jobs:
     strategy:
       max-parallel: 1
       matrix:
-        asset: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+        version: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
 
     steps:
       - uses: actions/checkout@v6
@@ -49,19 +49,23 @@ jobs:
         with:
           name: built-assets
           path: build/
-      - name: changelog to file
-        run: ${{ join(matrix.asset.changelog, '\n') }} > changelog.md
-      - name: Upload build artifacts
-        uses: actions/upload-artifact@v6
+      - name: read metadata.json
+        id: meta
+        run: |
+          JSON_FILE="build/metadata.json"
+          echo "mc_version=$(jq -r '.mc_versions' "$JSON_FILE")" >> $GITHUB_OUTPUT
+          
+          jq -r '.changelog[]' "$JSON_FILE" > changelog.md
+          
+          VERSION_JSON=$(jq -r ".versions.\"${{ matrix.version }}\"" "$JSON_FILE")
+          
+          echo "id=$(jq -r '.["version-id"]' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
+          echo "name=$(jq -r '.name' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
+          echo "path=$(jq -r '.path' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
+      - name: release
+        uses: softprops/action-gh-release@v2
         with:
-          name: changelog-{{ matrix.asset.version_id }}
-          path: build/
-
-      # - name: release
-      #   uses: softprops/action-gh-release@v2
-      #   with:
-      #     files: "${{ matrix.asset.path }}"
-      #     body_path: "changelog.md"
-      #     target_commitish: ${{ matrix.branch }}
-      #     name: ${{ steps.meta.outputs.mod_name }}
-      #     tag_name: ${{ steps.meta.outputs.mod_version}}
+          files: "${{ steps.meta.outputs.path }}"
+          body_path: "changelog.md"
+          name: ${{ steps.meta.outputs.name }} + ${{ steps.meta.outputs.mc_version }}
+          tag_name: ${{ steps.meta.outputs.id}}
