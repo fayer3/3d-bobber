@@ -29,7 +29,7 @@ def modify_shader_content(mode: str, enable_string: bool) -> str:
 
 
 def create_pack(version: str, image_name: str, suffix: str, mode: str, enable_string: bool) -> Path:
-    zip_filename = BASE_DIR.joinpath("build", version, f"3D-fishing-hook-bobber-{version}-{suffix}.zip")
+    zip_filename = BASE_DIR.joinpath("build", f"3D-fishing-hook-bobber-{version}-{suffix}.zip")
     zip_filename.parent.mkdir(parents=True, exist_ok=True)
 
     with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
@@ -92,7 +92,8 @@ def main():
         version_list.append(preset_id)
 
     # Write metadata.json
-    metadata_path = BASE_DIR / "build" / version / "metadata.json"
+    metadata_path = BASE_DIR.joinpath("build", version, "metadata.json")
+    metadata_path.parent.mkdir(exist_ok=True, parents=True)
     with open(metadata_path, "w", encoding="utf-8") as f:
         json.dump(metadata, f, indent=4)
 
