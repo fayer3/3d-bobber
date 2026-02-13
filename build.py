@@ -9,7 +9,7 @@ IMAGES_DIR = BASE_DIR.joinpath("images")
 BOBBER = "bobber.glsl"
 BOBBER_PATH = "assets/minecraft/shaders/include/bobber.glsl"
 
-IGNORE = [".git", "images", ".gitignore", "create.py", "build"]
+IGNORE = [".git", "images", ".gitignore", "build.py", "build"]
 
 def modify_shader_content(mode: str, enable_string: bool) -> str:
     with open(BOBBER_PATH, "r", encoding="utf-8") as f:
