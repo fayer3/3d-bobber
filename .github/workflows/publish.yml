@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  generate-matrix:
+  generate:
     runs-on: ubuntu-latest
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
@@ -32,13 +32,13 @@ jobs:
           name: built-assets
           path: build/
 
-  process-assets:
-    needs: generate-matrix
+  process:
+    needs: generate
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 1
       matrix:
-        asset: ${{ fromJson(needs.generate-matrix.outputs.matrix) }}
+        asset: ${{ fromJson(needs.generate.outputs.matrix) }}
 
     steps:
       - uses: actions/checkout@v6
