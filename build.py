@@ -29,8 +29,6 @@ def modify_shader_content(mode: str, enable_string: bool) -> str:
 
 
 def create_pack(version: str, image_name: str, suffix: str, mode: str, enable_string: bool):
-    print(f"Creating {suffix}...")
-
     zip_filename = BASE_DIR.joinpath("build", version, f"3D-fishing-hook-bobber-{version}-{suffix}.zip")
     zip_filename.parent.mkdir(parents=True, exist_ok=True)
 
@@ -72,6 +70,7 @@ def main():
         image = entry["image"]
         mode = entry["bobber_mode"]
         enable_string = entry["line"]
+        print(f"Creating {entry["id"]}...")
         create_pack(version, image, suffix, mode, enable_string)
 
     print("Done.")
