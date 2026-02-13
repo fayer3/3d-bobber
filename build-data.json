@@ -1,47 +1,52 @@
 {
-	"version": "v3.0",
+	"version": "3.0",
+	"changelog": [
+		"- added support for mc versions 1.20.5-26.1-snapshot-7",
+		"- added support for tinkers construct fishing rods"
+	],
+	"mc_versions": "[1.18,26.1-snapshot-7]",
 	"presets": [
-	{
-		"id": "fast",
-		"suffix": "fast",
-		"image": "pack_fast",
-		"bobber_mode": "bobber3Dbasic",
-		"line": false
-	},
-	{
-		"id": "fast-line",
-		"suffix": "fast-with-line",
-		"image": "pack_fast_line",
-		"bobber_mode": "bobber3Dbasic",
-		"line": true
-	},
-	{
-		"id": "flat",
-		"suffix": "flat",
-		"image": "pack_fancy_flat",
-		"bobber_mode": "bobber3DcomplexFast",
-		"line": false
-	},
-	{
-		"id": "flat-line",
-		"suffix": "flat-with-line",
-		"image": "pack_fancy_flat_line",
-		"bobber_mode": "bobber3DcomplexFast",
-		"line": true
-	},
-	{
-		"id": "fancy",
-		"suffix": "fancy",
-		"image": "pack_fancy",
-		"bobber_mode": "bobber3DcomplexFast",
-		"line": false
-	},
-	{
-		"id": "fancy-line",
-		"suffix": "fancy-with-line",
-		"image": "pack_fancy_line",
-		"bobber_mode": "bobber3DcomplexFast",
-		"line": true
-	}
-]
+		{
+			"id": "fast",
+			"suffix": "fast",
+			"image": "pack_fast",
+			"bobber_mode": "bobber3Dbasic",
+			"line": false
+		},
+		{
+			"id": "fast-line",
+			"suffix": "fast-with-line",
+			"image": "pack_fast_line",
+			"bobber_mode": "bobber3Dbasic",
+			"line": true
+		},
+		{
+			"id": "flat",
+			"suffix": "flat",
+			"image": "pack_fancy_flat",
+			"bobber_mode": "bobber3DcomplexFast",
+			"line": false
+		},
+		{
+			"id": "flat-line",
+			"suffix": "flat-with-line",
+			"image": "pack_fancy_flat_line",
+			"bobber_mode": "bobber3DcomplexFast",
+			"line": true
+		},
+		{
+			"id": "fancy",
+			"suffix": "fancy",
+			"image": "pack_fancy",
+			"bobber_mode": "bobber3DcomplexFast",
+			"line": false
+		},
+		{
+			"id": "fancy-line",
+			"suffix": "fancy-with-line",
+			"image": "pack_fancy_line",
+			"bobber_mode": "bobber3DcomplexFast",
+			"line": true
+		}
+	]
 }

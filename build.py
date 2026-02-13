@@ -28,7 +28,7 @@ def modify_shader_content(mode: str, enable_string: bool) -> str:
     return content
 
 
-def create_pack(version: str, image_name: str, suffix: str, mode: str, enable_string: bool):
+def create_pack(version: str, image_name: str, suffix: str, mode: str, enable_string: bool) -> Path:
     zip_filename = BASE_DIR.joinpath("build", version, f"3D-fishing-hook-bobber-{version}-{suffix}.zip")
     zip_filename.parent.mkdir(parents=True, exist_ok=True)
 
@@ -53,6 +53,7 @@ def create_pack(version: str, image_name: str, suffix: str, mode: str, enable_st
         with open(IMAGES_DIR / f"{image_name}.png", "rb") as f:
             zf.writestr("pack.png", f.read())
 
+    return zip_filename
 
 def main():
     data_file = BASE_DIR / "build-data.json"
@@ -62,16 +63,35 @@ def main():
 
     with open(data_file, "r", encoding="utf-8") as f:
         build_data = json.load(f)
-    
+
     version = build_data["version"]
+    metadata = {}
+    metadata["mc_versions"] = build_data["mc_versions"]
+    metadata["changelog"] = build_data["changelog"]
+    metadata_entries = []
+    metadata["versions"] = metadata_entries
 
     for entry in build_data["presets"]:
+        preset_id = entry["id"]
         suffix = entry["suffix"]
         image = entry["image"]
         mode = entry["bobber_mode"]
         enable_string = entry["line"]
-        print(f"Creating {entry["id"]}...")
-        create_pack(version, image, suffix, mode, enable_string)
+
+        print(f"Creating {preset_id}...")
+
+        zip_path = create_pack(version, image, suffix, mode, enable_string)
+
+        metadata_entries.append({
+            "version-id": f"{version}-{preset_id}",
+            "name": f"3D Bobber {version} {suffix.replace('-', '')}",
+            "path": str(zip_path.relative_to(BASE_DIR))
+        })
+
+    # Write metadata.json
+    metadata_path = BASE_DIR / "build" / version / "metadata.json"
+    with open(metadata_path, "w", encoding="utf-8") as f:
+        json.dump(metadata, f, indent=4)
 
     print("Done.")
 
