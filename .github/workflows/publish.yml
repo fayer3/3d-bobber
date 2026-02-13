@@ -31,7 +31,7 @@ jobs:
         uses: actions/upload-artifact@v6
         with:
           name: built-assets
-          path: build/${{ steps.set-matrix.outputs.version}}
+          path: build/
 
   process-assets:
     needs: generate-matrix
