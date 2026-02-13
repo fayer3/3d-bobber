@@ -34,6 +34,8 @@ jobs:
   process-assets:
     needs: generate-matrix
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     strategy:
       max-parallel: 1
       matrix:
@@ -60,12 +62,6 @@ jobs:
           echo "id=$(jq -r '.["version-id"]' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
           echo "name=$(jq -r '.name' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
           echo "path=$(jq -r '.path' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
-      - name: debug
-        run: |
-          tree -L 2
-          echo ${{ steps.meta.outputs.path }}
-          echo ${{ steps.meta.outputs.name }} + ${{ steps.meta.outputs.mc_version }}
-          echo ${{ steps.meta.outputs.id}}
       - name: release
         uses: softprops/action-gh-release@v2
         with:
