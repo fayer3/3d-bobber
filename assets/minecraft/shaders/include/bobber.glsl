@@ -7,7 +7,7 @@
 
 //#define bobberString          // show black string
 
-#define DEBUG
+//#define DEBUG
 
 in float isBobber;
 in vec3 viewPos;
