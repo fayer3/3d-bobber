@@ -1,7 +1,6 @@
 import zipfile
+import json
 from pathlib import Path
-
-VERSION = "v3.0"
 
 BASE_DIR = Path.cwd()
 IMAGES_DIR = BASE_DIR.joinpath("images")
@@ -9,7 +8,7 @@ IMAGES_DIR = BASE_DIR.joinpath("images")
 BOBBER = "bobber.glsl"
 BOBBER_PATH = "assets/minecraft/shaders/include/bobber.glsl"
 
-IGNORE = [".git", "images", ".gitignore", "build.py", "build"]
+IGNORE = [".git", "images", ".gitignore", "build.py", "build-data.json", "build"]
 
 def modify_shader_content(mode: str, enable_string: bool) -> str:
     with open(BOBBER_PATH, "r", encoding="utf-8") as f:
@@ -29,10 +28,10 @@ def modify_shader_content(mode: str, enable_string: bool) -> str:
     return content
 
 
-def create_pack(image_name: str, suffix: str, mode: str, enable_string: bool):
+def create_pack(version: str, image_name: str, suffix: str, mode: str, enable_string: bool):
     print(f"Creating {suffix}...")
 
-    zip_filename = BASE_DIR.joinpath("build", VERSION, f"3D-fishing-hook-bobber-{VERSION}-{suffix}.zip")
+    zip_filename = BASE_DIR.joinpath("build", version, f"3D-fishing-hook-bobber-{version}-{suffix}.zip")
     zip_filename.parent.mkdir(parents=True, exist_ok=True)
 
     with zipfile.ZipFile(zip_filename, "w", zipfile.ZIP_DEFLATED, compresslevel=9) as zf:
@@ -58,13 +57,22 @@ def create_pack(image_name: str, suffix: str, mode: str, enable_string: bool):
 
 
 def main():
+    data_file = BASE_DIR / "build-data.json"
 
-    create_pack("pack_fast", "fast", "bobber3Dbasic", False)
-    create_pack("pack_fast_line", "fast-with-line", "bobber3Dbasic", True)
-    create_pack("pack_fancy", "fancy", "bobber3DcomplexFast", False)
-    create_pack("pack_fancy_line", "fancy-with-line", "bobber3DcomplexFast", True)
-    create_pack("pack_fancy_flat", "flat", "bobber3Dflat", False)
-    create_pack("pack_fancy_flat_line", "flat-with-line", "bobber3Dflat", True)
+    if not data_file.exists():
+        raise FileNotFoundError("build-data.json not found in project root.")
+
+    with open(data_file, "r", encoding="utf-8") as f:
+        build_data = json.load(f)
+    
+    version = build_data["version"]
+
+    for entry in build_data["presets"]:
+        suffix = entry["suffix"]
+        image = entry["image"]
+        mode = entry["bobber_mode"]
+        enable_string = entry["line"]
+        create_pack(version, image, suffix, mode, enable_string)
 
     print("Done.")
 

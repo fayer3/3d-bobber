@@ -1,0 +1,41 @@
+{
+	"version": "v3.0",
+	"presets": [
+	{
+		"suffix": "fast",
+		"image": "pack_fast",
+		"bobber_mode": "bobber3Dbasic",
+		"line": false
+	},
+	{
+		"suffix": "fast-with-line",
+		"image": "pack_fast_line",
+		"bobber_mode": "bobber3Dbasic",
+		"line": true
+	},
+	{
+		"suffix": "flat",
+		"image": "pack_fancy_flat",
+		"bobber_mode": "bobber3DcomplexFast",
+		"line": false
+	},
+	{
+		"suffix": "flat-with-line",
+		"image": "pack_fancy_flat_line",
+		"bobber_mode": "bobber3DcomplexFast",
+		"line": true
+	},
+	{
+		"suffix": "fancy",
+		"image": "pack_fancy",
+		"bobber_mode": "bobber3DcomplexFast",
+		"line": false
+	},
+	{
+		"suffix": "fancy-with-line",
+		"image": "pack_fancy_line",
+		"bobber_mode": "bobber3DcomplexFast",
+		"line": true
+	}
+]
+}
