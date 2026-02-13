@@ -91,5 +91,5 @@ jobs:
           version: "${{ steps.meta.outputs.id}}"
           version-type: "release"
 
-          loaders: "resourcepack"
+          loaders: "minecraft"
           game-versions: "${{ steps.meta.outputs.mc_version }}"
