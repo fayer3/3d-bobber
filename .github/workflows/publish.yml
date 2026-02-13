@@ -22,10 +22,8 @@ jobs:
       - name: Read metadata and create matrix
         id: set-matrix
         run: |
-          VERSION=$(jq -r '.version' build-data.json)
-          MATRIX=$(jq -c '.version_list' build/$VERSION/metadata.json)
+          MATRIX=$(jq -c '.version_list' build/metadata.json)
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
