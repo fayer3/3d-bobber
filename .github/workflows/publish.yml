@@ -34,8 +34,6 @@ jobs:
   process-assets:
     needs: generate-matrix
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
     strategy:
       max-parallel: 1
       matrix:
@@ -63,9 +61,21 @@ jobs:
           echo "name=$(jq -r '.name' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
           echo "path=$(jq -r '.path' <<< "$VERSION_JSON")" >> $GITHUB_OUTPUT
       - name: release
-        uses: softprops/action-gh-release@v2
+        uses: Kir-Antipov/mc-publish@v3.3
         with:
-          files: "${{ steps.meta.outputs.path }}"
-          body_path: "changelog.md"
-          name: ${{ steps.meta.outputs.name }} + ${{ steps.meta.outputs.mc_version }}
-          tag_name: ${{ steps.meta.outputs.id}}
+          modrinth-id: 9LkpbDXl
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          modrinth-featured: false
+
+          curseforge-id: 623663
+          curseforge-token: ${{ secrets.CURSEFORGE_TOKEN }}
+
+          files: ${{ steps.meta.outputs.path }}
+          changelog-file: "changelog.md"
+
+          name: "${{ steps.meta.outputs.name }}"
+          version: "${{ steps.meta.outputs.id}}"
+          version-type: "release"
+
+          loaders: "${{ steps.meta.outputs.forge_loaders}}"
+          game-versions: "${{ steps.meta.outputs.mc_version }}"

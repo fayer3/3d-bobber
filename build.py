@@ -86,7 +86,7 @@ def main():
 
         metadata_entries.update({preset_id: {
             "version-id": f"{version}-{preset_id}",
-            "name": f"3D Bobber {version} {suffix.replace('-', '')}",
+            "name": f"3D Bobber {version} {suffix.replace('-', ' ')}",
             "path": str(zip_path.relative_to(BASE_DIR))
         }})
         version_list.append(preset_id)
