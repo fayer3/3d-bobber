@@ -22,14 +22,26 @@ jobs:
       - name: Read metadata and create matrix
         id: set-matrix
         run: |
+          VERSION=$(jq -r '.version' build-data.json)
           MATRIX=$(jq -c '.version_list' build/metadata.json)
           echo "matrix=$MATRIX" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v6
         with:
           name: built-assets
           path: build/
+      - name: make tag
+        uses: actions/github-script@v5
+        with:
+          script: |
+            github.rest.git.createRef({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              ref: 'refs/tags/${{ steps.set-matrix.outputs.version }}',
+              sha: context.sha
+            })
 
   process-assets:
     needs: generate-matrix
